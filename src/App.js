@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
+import ProductList from './ProductList';
+import ProductDetails from './ProductDetails'; 
 
 function App() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('https://dummyjson.com/products');
+        setProducts(response.data.products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <ProductList products={products}/>,
+  },
+  {
+    path: "details/:id",
+    element: <ProductDetails products={products}/>,
+  },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <RouterProvider router={router}/>
+      </div>
   );
 }
 

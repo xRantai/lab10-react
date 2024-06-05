@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+/* ProductList.css */
+
+.ProductList ul {
+  text-align: left;
+}
